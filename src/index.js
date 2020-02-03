@@ -1,10 +1,38 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const taskList = new TaskList();
+document.addEventListener('DOMContentLoaded', () => {
+    const formEl = document.querySelector('#create-task-form')
+    const unorderedList = document.querySelector("#tasks");
 
-  const listContainer = document.getElementById("list");
-  const renderApp = () => (listContainer.innerHTML = taskList.render());
+  formEl.addEventListener('submit', (e) =>{
+    e.preventDefault()
 
-  // Add Form Behavior Here!
+    const newTask = document.querySelector('#new-task-description')
+    const task = new Task(newTask.value)
+    console.log(task)
 
-  renderApp()
-});
+    unorderedList.append(task.element)
+    newTask.value = '';
+  })
+
+
+  unorderedList.addEventListener('click', (e)=>{
+    if(e.target.className === 'remove-btn') {
+      e.target.parentNode.remove()
+    }
+  })
+})
+
+class Task {
+  constructor(value){
+    this.element = this.createTaskElement(value)
+  }
+
+  createTaskElement(value) {
+    const newTaskEl = document.createElement("li");
+    newTaskEl.innerText = value;
+    const removeButton = document.createElement("button");
+    removeButton.innerText = 'Remove';
+    removeButton.className= 'remove-btn';
+    newTaskEl.append(removeButton)
+    return newTaskEl
+  }
+}
